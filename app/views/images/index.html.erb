@@ -1,0 +1,13 @@
+<%= form_for Image.new do |f| %>
+  <p>
+    <%= f.file_field :image_file, multiple: true, name: "image[image_file]" %>
+  </p>
+<% end %>
+
+<div class="thumbnail_grid">
+  <% @images.each do |image| %>
+    <div class="thumbnail">
+      <%= image_tag image.image_file_url %>
+    </div>
+  <% end %>
+</div>

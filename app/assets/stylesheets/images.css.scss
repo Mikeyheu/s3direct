@@ -1,0 +1,54 @@
+*, *:before, *:after {
+  -moz-box-sizing: border-box; 
+  -webkit-box-sizing: border-box; 
+  box-sizing: border-box;
+}
+
+ body, html {
+  margin:0;
+  padding:0;
+}
+
+.upload_area {
+  width:100%;
+  background:#999;
+  height:60px;
+  padding:20px;
+}
+
+.thumbnail_grid {
+  margin-top:20px;
+}
+
+.thumbnail {
+  margin-left:20px;
+  margin-bottom:20px;
+  float:left;
+  background: #CCC;
+  width:160px;
+  height:120px;
+  position:relative;
+}
+
+.thumbnail div:first-child {
+  display:block;
+  margin-top:36px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.thumbnail div.processing {
+  position: absolute;
+  margin:0;
+  top: 32px;
+  left: 50px;
+  height:54px;
+  width:55px;
+  background-image: url(image-path('ajax-loader.gif'));
+}
+
+img {
+  position:absolute;
+  top:0;
+  left:0;
+}
