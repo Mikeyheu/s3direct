@@ -42,22 +42,46 @@ $(function(){
     });
   }
 
-  $('#new_image').fileupload({
-    add: function(e, data) {
+  $('#fileupload').fileupload({
 
-      $.ajax({
-        url: 'images/s3url',
-        type: 'GET',
-        dataType: 'json',
-        data: {
-          filename: data.files[0].name
-        },
-        async: false,
-        success: function(data){
-          // update the form fields on the html
-        }
-      })
-    }
+    add: function(e, data) {
+      file = data.files[0]
+      var template = $('<div class="thumbnail"><input type="text" value="0" data-width="48" data-height="48"'+
+                       ' data-fgColor="#0788a5" data-readOnly="1" data-bgColor="#3e4043" /></div>');
+      data.context = template.appendTo($('.thumbnail_grid'));
+      template.find('input').knob({
+        inline: false
+      });
+      data.submit();
+    },
+    progress: function(e, data) {
+      // Calculate the completion percentage of the upload
+      var progress = parseInt(data.loaded / data.total * 100, 10);
+
+      // Update the hidden input field and trigger a change
+      // so that the jQuery knob plugin knows to update the dial
+      data.context.find('input').val(progress).change();
+
+      if(progress == 100){
+        data.context.find('canvas, input, div').remove();
+        data.context.append('<div class="processing"></div>');
+      }
+
+    },
+    done: function(e, data) {
+      console.log(data)
+      // file = data.files[0]
+      // domain = $('#fileupload').attr('action')
+      // path = $('#fileupload input[name=key]').val().replace('${filename}', file.name)
+      // to = $('#fileupload').data('post')
+      // content = {}
+      // content[$('#fileupload').data('as')] = domain + path
+      // $.post(to, content)
+
+    },
+    fail: function(e, data) {
+      console.log('something broke')
+    },
 
   });
 

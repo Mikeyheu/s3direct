@@ -17,7 +17,7 @@ module UploadHelper
         bucket: ENV["AWS_S3_BUCKET"],
         acl: "public-read",
         expiration: 10.hours.from_now,
-        max_file_size: 500.megabytes,
+        max_file_size: 10.megabytes,
         as: "file"
       )
     end
@@ -71,12 +71,11 @@ module UploadHelper
     end
 
     def signature
-      Base64.encode64(
-        OpenSSL::HMAC.digest(
-          OpenSSL::Digest::Digest.new('sha1'),
-          @options[:aws_secret_access_key], policy
-        )
-      ).gsub("\n", "")
+      digest = OpenSSL::Digest.new('sha1')
+      key = @options[:aws_secret_access_key]
+      data = policy
+      hmac = OpenSSL::HMAC.digest(digest, key, data)
+      Base64.encode64(hmac).gsub("\n", "")
     end
   end
 end
