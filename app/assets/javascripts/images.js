@@ -42,76 +42,94 @@ $(function(){
     });
   }
 
-
   $('#new_image').fileupload({
-    
-    dataType: 'json',
-    sequentialUploads: true, // need this???
-    start: function(e) {
-      // start checking to see if files have been processed
-      unprocessed_file_ids = [];
-      all_files_uploaded = false;
-      // setTimeout(display_unprocessed_files, 3000);
-    },
-    add: function(e, data){
-      console.log("data add" + data.total/1000 + "K")
-      var template = $('<div class="thumbnail"><input type="text" value="0" data-width="48" data-height="48"'+
-        ' data-fgColor="#0788a5" data-readOnly="1" data-bgColor="#3e4043" /></div>');
+    add: function(e, data) {
 
-      data.context = template.appendTo($('.thumbnail_grid'));
-      template.find('input').knob({
-        inline: false
-      });
-      data.submit();
-
-    },
-    submit: function(e, data){
-      var $this = $(this);
-  
       $.ajax({
+        url: 'images/s3url',
+        type: 'GET',
         dataType: 'json',
-        url: '/images/s3form',
-        cache: false,
-        success: function (result) {
-          console.log(result)
-          data.formData = result;
-          $this.fileupload('send', data);
+        data: {
+          filename: data.files[0].name
         },
-        error: function(response, status)  {
-          console.log(response)
-          alert("there was an error mike");
+        async: false,
+        success: function(data){
+          // update the form fields on the html
         }
-      });
-      return false;
-    },
-    progress: function(e, data){
-
-      // Calculate the completion percentage of the upload
-      var progress = parseInt(data.loaded / data.total * 100, 10);
-
-      // Update the hidden input field and trigger a change
-      // so that the jQuery knob plugin knows to update the dial
-      data.context.find('input').val(progress).change();
-
-      if(progress == 100){
-        data.context.find('canvas, input, div').remove();
-        data.context.append('<div class="processing"></div>');
-      }
-
-    },
-    progressall: function(e, data) {
-      var total_progress = parseInt(data.loaded / data.total * 100, 10);
-      if(total_progress == 100){
-        all_files_uploaded = true;
-      }
-    },
-    done: function(e, data) {
-
-      data.context.attr("data-image-id", data.result.image_id)
-      unprocessed_file_ids.push(data.result.image_id);   
-
+      })
     }
+
   });
+
+  // $('#new_image').fileupload({
+    
+  //   dataType: 'json',
+  //   sequentialUploads: true, // need this???
+  //   start: function(e) {
+  //     // start checking to see if files have been processed
+  //     unprocessed_file_ids = [];
+  //     all_files_uploaded = false;
+  //     // setTimeout(display_unprocessed_files, 3000);
+  //   },
+  //   add: function(e, data){
+  //     console.log("data add" + data.total/1000 + "K")
+  //     var template = $('<div class="thumbnail"><input type="text" value="0" data-width="48" data-height="48"'+
+  //       ' data-fgColor="#0788a5" data-readOnly="1" data-bgColor="#3e4043" /></div>');
+
+  //     data.context = template.appendTo($('.thumbnail_grid'));
+  //     template.find('input').knob({
+  //       inline: false
+  //     });
+  //     data.submit();
+
+  //   },
+  //   submit: function(e, data){
+  //     var $this = $(this);
+  
+  //     $.ajax({
+  //       dataType: 'json',
+  //       url: '/images/s3form',
+  //       cache: false,
+  //       success: function (result) {
+  //         console.log(result)
+  //         data.formData = result;
+  //         $this.fileupload('send', data);
+  //       },
+  //       error: function(response, status)  {
+  //         console.log(response)
+  //         alert("there was an error mike");
+  //       }
+  //     });
+  //     return false;
+  //   },
+  //   progress: function(e, data){
+
+  //     // Calculate the completion percentage of the upload
+  //     var progress = parseInt(data.loaded / data.total * 100, 10);
+
+  //     // Update the hidden input field and trigger a change
+  //     // so that the jQuery knob plugin knows to update the dial
+  //     data.context.find('input').val(progress).change();
+
+  //     if(progress == 100){
+  //       data.context.find('canvas, input, div').remove();
+  //       data.context.append('<div class="processing"></div>');
+  //     }
+
+  //   },
+  //   progressall: function(e, data) {
+  //     var total_progress = parseInt(data.loaded / data.total * 100, 10);
+  //     if(total_progress == 100){
+  //       all_files_uploaded = true;
+  //     }
+  //   },
+  //   done: function(e, data) {
+
+  //     data.context.attr("data-image-id", data.result.image_id)
+  //     unprocessed_file_ids.push(data.result.image_id);   
+
+  //   }
+  // });
 
   // Helper function that formats the file sizes
   function formatFileSize(bytes) {

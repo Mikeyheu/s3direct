@@ -1,7 +1,4 @@
 S3direct::Application.routes.draw do
-  resources :images do
-    collection do
-      get :s3form
-    end
-  end
+  resources :images 
+  resources :s3url, only: [:index]
 end

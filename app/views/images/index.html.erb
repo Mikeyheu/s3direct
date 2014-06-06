@@ -1,11 +1,13 @@
 <%= form_for Image.new do |f| %>
   <p>
     <%= f.file_field :image_file, multiple: true, name: "image[image_file]" %>
+    <%= hidden_field_tag 'AWSAccessKeyId', ENV['AWS_ACCESS_KEY_ID']  %>
+    <%= hidden_field_tag :acl, 'public-read' %>
+    <%= hidden_field_tag :key %>
+    <%= hidden_field_tag :policy %>
+    <%= hidden_field_tag :signature %>
+    <%= hidden_field_tag :success_action_status, "201" %>
   </p>
-<% end %>
-
-<%= s3_uploader_form post: images_url, as: "image[image_file]" do %>
-  <%= file_field_tag :file, multiple: true %>
 <% end %>
 
 <div class="thumbnail_grid">
