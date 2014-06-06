@@ -65,6 +65,25 @@ $(function(){
       data.submit();
 
     },
+    submit: function(e, data){
+      var $this = $(this);
+  
+      $.ajax({
+        dataType: 'json',
+        url: '/images/s3form',
+        cache: false,
+        success: function (result) {
+          console.log(result)
+          data.formData = result;
+          $this.fileupload('send', data);
+        },
+        error: function(response, status)  {
+          console.log(response)
+          alert("there was an error mike");
+        }
+      });
+      return false;
+    },
     progress: function(e, data){
 
       // Calculate the completion percentage of the upload

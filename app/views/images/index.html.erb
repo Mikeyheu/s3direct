@@ -4,6 +4,10 @@
   </p>
 <% end %>
 
+<%= s3_uploader_form post: images_url, as: "image[image_file]" do %>
+  <%= file_field_tag :file, multiple: true %>
+<% end %>
+
 <div class="thumbnail_grid">
   <% @images.each do |image| %>
     <div class="thumbnail">
