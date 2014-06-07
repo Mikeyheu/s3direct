@@ -44,11 +44,12 @@
   left: 50px;
   height:54px;
   width:55px;
-  background-image: url(image-path('ajax-loader.gif'));
+  background-image: url(asset-url('ajax-loader.gif', image));
 }
 
 img {
   position:absolute;
   top:0;
   left:0;
+  width: 100%;
 }

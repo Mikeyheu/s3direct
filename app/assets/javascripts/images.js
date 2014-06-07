@@ -70,14 +70,13 @@ $(function(){
     },
     done: function(e, data) {
       console.log(data)
-      // file = data.files[0]
-      // domain = $('#fileupload').attr('action')
-      // path = $('#fileupload input[name=key]').val().replace('${filename}', file.name)
-      // to = $('#fileupload').data('post')
-      // content = {}
-      // content[$('#fileupload').data('as')] = domain + path
-      // $.post(to, content)
-
+      file = data.files[0]
+      domain = $('#fileupload').attr('action')
+      path = $('#fileupload input[name=key]').val().replace('${filename}', file.name)
+      to = $('#fileupload').data('post')
+      content = {}
+      content[$('#fileupload').data('as')] = domain + path
+      $.post(to, content)
     },
     fail: function(e, data) {
       console.log('something broke')
