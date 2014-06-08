@@ -44,6 +44,13 @@ $(function(){
 
   $('#fileupload').fileupload({
 
+    start: function(e) {
+      // start checking to see if files have been processed
+      unprocessed_file_ids = [];
+      all_files_uploaded = false;
+      // setTimeout(display_unprocessed_files, 3000);
+    },
+
     add: function(e, data) {
       file = data.files[0]
       var template = $('<div class="thumbnail"><input type="text" value="0" data-width="48" data-height="48"'+
@@ -68,13 +75,20 @@ $(function(){
       }
 
     },
+    progressall: function(e, data) {
+      var total_progress = parseInt(data.loaded / data.total * 100, 10);
+      if(total_progress == 100){
+        all_files_uploaded = true;
+        console.log("all finished uploading")
+      }
+    },
     done: function(e, data) {
-      console.log(data)
       file = data.files[0]
       domain = $('#fileupload').attr('action')
       path = $('#fileupload input[name=key]').val().replace('${filename}', file.name)
       to = $('#fileupload').data('post')
       content = {}
+      // This next line is interesting - not sure how image[image_url] converts to the object hash
       content[$('#fileupload').data('as')] = domain + path
       $.post(to, content)
     },

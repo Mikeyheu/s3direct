@@ -44,7 +44,7 @@
   left: 50px;
   height:54px;
   width:55px;
-  background-image: url(asset-url('ajax-loader.gif', image));
+  background-image: asset-url('ajax-loader.gif', image);
 }
 
 img {
