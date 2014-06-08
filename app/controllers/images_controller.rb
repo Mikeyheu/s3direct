@@ -10,7 +10,7 @@ class ImagesController < ApplicationController
       if @image.save
         # defer all these to background process???
         # send message to sqs with image id and original image url for image processing
-        SQS_QUEUE.send_message({image_id: @image.id, image_url:@image.image_url}.to_json)
+        JobQueue.queue.send_message({image_id: @image.id, image_url:@image.image_url}.to_json)
 
 
         # image_processed attribute is set to default value of false when image is created
