@@ -11,7 +11,7 @@ $(function(){
       url: "/images/check_processed",
       data:{ file_ids: unprocessed_file_ids},
       success: function(response) {
-
+        
         var image_ids = response.image_ids
         var image_urls = response.image_urls
 
@@ -48,7 +48,7 @@ $(function(){
       // start checking to see if files have been processed
       unprocessed_file_ids = [];
       all_files_uploaded = false;
-      // setTimeout(display_unprocessed_files, 3000);
+      setTimeout(display_unprocessed_files, 3000);
     },
 
     add: function(e, data) {
@@ -83,6 +83,7 @@ $(function(){
       }
     },
     done: function(e, data) {
+      var my_div = data.context;
       file = data.files[0]
       domain = $('#fileupload').attr('action')
       path = $('#fileupload input[name=key]').val().replace('${filename}', file.name)
@@ -90,7 +91,23 @@ $(function(){
       content = {}
       // This next line is interesting - not sure how image[image_url] converts to the object hash
       content[$('#fileupload').data('as')] = domain + path
-      $.post(to, content)
+
+      // we are basically creating the image here
+      // $.post(to, content)
+
+      $.ajax({
+        type: "POST",
+        url: to,
+        data: content,
+        dataType: 'json',
+        success: function(response) {
+          console.log(response.image_id)
+          my_div.attr("data-image-id", response.image_id)
+          unprocessed_file_ids.push(response.image_id);  
+        }
+      });
+
+
     },
     fail: function(e, data) {
       console.log('something broke')

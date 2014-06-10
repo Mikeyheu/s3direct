@@ -1,6 +1,6 @@
 class Image < ActiveRecord::Base
   
-  after_save :send_to_sqs
+  after_commit :send_to_sqs
   
   private
 
